@@ -11,8 +11,8 @@ public class Item{
 
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue
     private Long id;
 
     @Column(name = "name")
@@ -32,7 +32,7 @@ public class Item{
 
     }
 
-    private Item(String name, String description){
+    public Item(String name, String description){
         this.name        = name;
         this.description = description;
     }
