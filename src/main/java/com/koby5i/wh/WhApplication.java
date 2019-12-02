@@ -4,6 +4,7 @@ package com.koby5i.wh;
 import com.koby5i.wh.domain.Item;
 import com.koby5i.wh.repository.ItemRepository;
 
+import com.koby5i.wh.service.DataLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class WhApplication {
 	// ItemRepository
 	@Autowired
 	ItemRepository itemRepository;
+
+	@Autowired
+	DataLoader dataLoader;
 
 	public static void main(String[] args) {
 		SpringApplication.run(WhApplication.class, args);
