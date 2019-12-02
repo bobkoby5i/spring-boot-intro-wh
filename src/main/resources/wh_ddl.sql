@@ -21,3 +21,15 @@ wh_db=# select * from items;
   3 | laptop  | hp              |  10 | 1500.00
   4 | mouse   | logitech        |  10 |   29.99
 (4 rows)
+
+
+
+DROP TABLE items;
+CREATE TABLE items
+(
+    id                     int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    name                   varchar(15),
+    description            varchar(30),
+    qty                    int,
+        price                 decimal(10,2)
+);
