@@ -12,6 +12,9 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
     List<Item> findAll();
 
     //@Override
+    //Item findOne(long id);
+
+    //@Override
     //ItemEntity save(ItemEntity itemEntity);
     //Item save(Item item);
 
