@@ -23,5 +23,7 @@ public class ItemServiceImpl implements ItemService {
     //public Item read(long id) {
     //    return itemRepository.findOne(id);
     //}
-
+    public void delete(Long id){
+        itemRepository.deleteById(id);
+    }
 }
