@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @RestController
 @RequestMapping("/items")
@@ -20,7 +21,7 @@ public class ItemController {
         this.itemService = itemService;
     }
 
-    @RequestMapping( value ="/", method = RequestMethod.GET)
+    @RequestMapping( value ="/list", method = RequestMethod.GET)
     public Iterable<Item> list(){
         return itemService.list();
     }
@@ -35,6 +36,11 @@ public class ItemController {
         return "Hello from RESTController";
     }
 
-
+    @RequestMapping(value ="/delete/{id}", method = RequestMethod.DELETE)
+    public String delete(@PathVariable Long id, RedirectAttributes redirectAttr){
+        itemService.delete(id);
+        redirectAttr.addFlashAttribute("message", "Iteam was deleted");
+        return "redirect:/items";
+    }
 
 }

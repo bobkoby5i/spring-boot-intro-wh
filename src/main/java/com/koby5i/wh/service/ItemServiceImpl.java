@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ItemServiceImpl {
+public class ItemServiceImpl implements ItemService {
     private ItemRepository itemRepository;
 
     @Autowired
@@ -23,5 +23,7 @@ public class ItemServiceImpl {
     //public Item read(long id) {
     //    return itemRepository.findOne(id);
     //}
-
+    public void delete(Long id){
+        itemRepository.deleteById(id);
+    }
 }
