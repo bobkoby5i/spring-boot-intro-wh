@@ -1,0 +1,65 @@
+version: "3" 
+services: 
+#  postgres: 
+#    image: postgres:latest 
+#    network_mode: bridge 
+#    container_name: postgres 
+#    volumes: 
+#      - postgres-data:/var/lib/postgresql/data 
+#    expose: 
+#      - 5432 
+#    ports: 
+#      - 5432:5432 
+#    environment: 
+#      - POSTGRES_PASSWORD=postgres 
+#      - POSTGRES_USER=postgres 
+#      - POSTGRES_DB=postgres 
+#    restart: unless-stopped 
+#volumes: 
+#  postgres-data: 
+
+
+  wh-database:
+    image: postgres:latest   
+    ports:            
+      - 5432:5432     
+    environment:
+      - POSTGRES_DB=wh_db
+      - POSTGRES_USER=wh_user
+      - POSTGRES_PASSWORD=wh_password
+      - PGDATA=/var/lib/postgresql/db
+    volumes:
+      - /var/lib/postgresql/db
+
+
+  wh_app:
+    build: .
+    container_name: springbootapp
+    image: intro/wh:latest
+    depends_on:
+      - wh-database
+    expose: 
+      - 8080
+    ports: 
+      - 8080:8080       
+    environment:
+      ACTIVE_PROFILE: dev3docker
+#      CONFIGURATION_SERVER_URI: http://configuration:8888      
+      
+      
+      
+    
+# APP*****************************************
+#  springbootapp: 
+#    build: . 
+#    network_mode: bridge 
+#    container_name: springbootapp 
+#    expose: 
+#      - 8080 
+#    ports: 
+#      - 8080:8080 
+#    restart: unless-stopped 
+#    depends_on: 
+#      - postgres 
+#    links: 
+#      - postgres 
