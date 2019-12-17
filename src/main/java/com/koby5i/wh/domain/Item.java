@@ -1,11 +1,21 @@
 package com.koby5i.wh.domain;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "items")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+
 //public  class Item implements Serializable {
 public class Item{
 
@@ -28,9 +38,9 @@ public class Item{
     private double  price;
 
     // private no args constructor is need by JPA by Dan Vega
-    private Item() {
-
-    }
+//    private Item() {
+//
+//    }
 
     public Item(String name, String description){
         this.name        = name;
