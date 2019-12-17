@@ -17,8 +17,6 @@ plugins {
 	id "io.swagger.core.v3.swagger-gradle-plugin" version "2.1.0"
 }
 
-
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -31,6 +29,19 @@ sourceCompatibility = 11
 repositories {
 	mavenCentral()
 }
+
+
+task copyJarToDockerPackage(type: Copy, dependsOn: bootJar){
+	from "./build/libs/" // source folder with jar
+	into 'docker/' // your folder with Dockerfile
+	include("wh-${version}.jar") // name of generated jar
+	rename ("wh-${version}.jar", "spring-boot-intro-wh.jar") // change name to same from Dockerfile
+}
+
+build.dependsOn copyJarToDockerPackage // Before task build do this first
+
+
+
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
