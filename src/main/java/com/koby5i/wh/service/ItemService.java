@@ -7,6 +7,8 @@ import com.koby5i.wh.domain.Item;
 
 public interface ItemService {
     Iterable<Item> list();
-    //Item read(long id);
-    public void delete(Long id);
+    Item read(long id);
+    Item create(Item item);
+    Item update(long id, Item item);
+    void delete(long id);
 }

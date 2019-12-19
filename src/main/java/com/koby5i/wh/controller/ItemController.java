@@ -18,25 +18,45 @@ public class ItemController {
         this.itemService = itemService;
     }
 
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String redirToList(){
+        return "redirect:/items/list";
+    }
+
     @RequestMapping( value ="/list", method = RequestMethod.GET)
-    public Iterable<Item> list(){
+    public Iterable<Item> listItems(){
         return itemService.list();
     }
 
-//    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-//    public Item read(@PathVariable(value="id") long id){
-//        return itemService.read(id);
-//    }
-@GetMapping("/hello")
-public String home(){
-    return "Hello from RESTController";
-}
+    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+    public Item getItem(@PathVariable(value="id") long id){
+        return itemService.read(id);
+    }
+
+    @RequestMapping(value = "/", method = RequestMethod.POST)
+    public Item createItem(@RequestBody Item item){
+        return itemService.create(item);
+    }
+
+
+    @RequestMapping( value = "/{id}", method = RequestMethod.PUT )
+    public Item updateItem(@PathVariable(value="id") long id, @RequestBody Item item){
+        return itemService.update(id, item);
+        //return "redirect:/product/show/" + savedProduct.getId();
+
+    }
+
+
+    @GetMapping("/hello")
+    public String home(){
+        return "Hello from RESTController";
+    }
 
     @RequestMapping(value ="/delete/{id}", method = RequestMethod.DELETE)
-    public String delete(@PathVariable Long id, RedirectAttributes redirectAttr){
+    public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttr){
         itemService.delete(id);
-        redirectAttr.addFlashAttribute("message", "Iteam was deleted");
-        return "redirect:/items";
+        redirectAttr.addFlashAttribute("message", "Item was deleted");
+        return "redirect:/items/list";
     }
 
 }
