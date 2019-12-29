@@ -19,9 +19,12 @@ public class DataLoader {
     @PostConstruct
     private void loadData(){
         // create an item
-        Item item = new Item("ipad mini", "Appla tablet ipad mini");
+        Item item = new Item("ipad mini", "Apple tablet ipad mini");
         item.setPrice(13.99);
         item.setQty(22);
+        item.setUpdatedAt(java.time.LocalDateTime.now());
+        item.setCreatedAt(java.time.LocalDateTime.now());
+
         itemRepository.save(item);
     }
 }

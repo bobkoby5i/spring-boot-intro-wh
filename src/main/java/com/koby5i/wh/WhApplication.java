@@ -19,7 +19,7 @@ public class WhApplication {
 
 	//co to jest
 	private static final Logger logger = LoggerFactory.getLogger(WhApplication.class);
-	//private static final Logger logger = LoggerFactory
+	//private static.templates.templates final Logger logger = LoggerFactory
 
 	// ItemRepository
 	@Autowired

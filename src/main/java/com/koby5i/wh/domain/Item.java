@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "items")
@@ -37,6 +39,13 @@ public class Item{
     @Column(name = "price")
     private double  price;
 
+    @Column(name = "createdAt")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updatedAt")
+    private LocalDateTime updatedAt;
+
+
     // private no args constructor is need by JPA by Dan Vega
 //    private Item() {
 //
@@ -45,6 +54,7 @@ public class Item{
     public Item(String name, String description){
         this.name        = name;
         this.description = description;
+        this.createdAt   = java.time.LocalDateTime.now();
     }
 
     public String getName() {
@@ -79,8 +89,25 @@ public class Item{
         this.price = price;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+
     @Override
     public String toString() {
-        return String.format("Item[id=%d, name='%s', description='%s', qty=%d]", id, name, description, qty);
+        return String.format("Item[id=%d, name='%s', description='%s', qty=%d, price=%f]", id, name, description, qty, price);
     }
 }

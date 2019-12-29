@@ -39,6 +39,8 @@ public class ItemConfig {
                 .description("saab 95")
                 .qty(20)
                 .price(20000)
+                .createdAt(java.time.LocalDateTime.now())
+                .updatedAt(java.time.LocalDateTime.now())
                 .build();
         itemRepository.save(item);
     }
