@@ -29,17 +29,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/css/**", "/index").permitAll()
-                .antMatchers("/user/**").hasRole("USER")
-                .antMatchers("/items/list/**").permitAll()
-                .antMatchers("/items/show/**").hasRole("USER")
-                .antMatchers("/items/delete/**").hasRole("ADMIN")
-                .antMatchers("/items/new/**").hasRole("ADMIN")
-                .antMatchers("/items/edit/**").hasRole("ADMIN")
-                .antMatchers("/items/saveorupdate/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasRole("USER")
+                    .antMatchers("/items/show/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/items/edit/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/items/saveorupdate/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/items/delete/**").hasRole("ADMIN")
+                    .antMatchers("/items/new/**").hasRole("ADMIN")
+                    .antMatchers("/items/list/**").permitAll()
+                    .antMatchers("/css/**", "/index").permitAll()
+//                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login").failureUrl("/login-error");
+                    .formLogin()
+                .and()
+                    .logout();
+                //.loginPage("/login").failureUrl("/login-error");
     }
 
 //    @Autowired
@@ -67,16 +70,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
+        String password = "password";
+        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(password);
+        System.out.println("password='" + password + "' encodedPassword='" + encodedPassword + "'.");
+
+
         auth.inMemoryAuthentication()
-                .passwordEncoder(passwordEncoder())
-                .withUser("user").password(USER_ENCODED_PASSWORD).roles("USER")
+                .passwordEncoder(getPasswordEncoder())
+                .withUser("user").password(encodedPassword).roles("USER")
                 .and()
-                .withUser("admin").password(USER_ENCODED_PASSWORD).roles("USER","ADMIN");
+                .withUser("admin").password(encodedPassword).roles("USER","ADMIN");
     }
 
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
