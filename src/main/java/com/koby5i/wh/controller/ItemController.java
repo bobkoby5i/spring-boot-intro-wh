@@ -5,6 +5,7 @@ import com.koby5i.wh.converters.ItemToItemForm;
 import com.koby5i.wh.domain.Item;
 import com.koby5i.wh.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -61,6 +62,7 @@ public class ItemController {
         return "itemshow.html";
     }
 
+    @Secured("ROLE_USER")
     @RequestMapping( value = "/edit/{id}", method = RequestMethod.GET)
     public String editItem(@PathVariable(value="id") long id, Model model){
         Item item = itemService.read(id);
@@ -69,6 +71,7 @@ public class ItemController {
         return "itemform.html";
     }
 
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String newItem(Model model){
         //Item item = itemService.read(id);
