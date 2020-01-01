@@ -33,12 +33,21 @@
                 <a class="navbar-brand" href="#">koby5i</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-5">
-                <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link">Guest User</a></p>
+                <p class="navbar-text navbar-right">Signed in as <a href="#" class="navbar-link"><span sec:authentication="name"></span></a></p>
             </div>
         </div>
     </nav>
 
 
+    <div th:fragment="logout" class="logout" sec:authorize="isAuthenticated()">
+        Logged in user: <span sec:authentication="name"></span> |
+        Roles: <span sec:authentication="principal.authorities"></span>
+        <div>
+            <form action="#" th:action="@{/logout}" method="post">
+                <input type="submit" value="Logout" />
+            </form>
+        </div>
+    </div>
 
     <div class="container">
         <div th:if="${not #lists.isEmpty(items)}">

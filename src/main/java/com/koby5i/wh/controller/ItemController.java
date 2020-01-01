@@ -5,6 +5,7 @@ import com.koby5i.wh.converters.ItemToItemForm;
 import com.koby5i.wh.domain.Item;
 import com.koby5i.wh.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,17 +15,14 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping("/items")
+//@RequestMapping("/items")
 public class ItemController {
 
     // business logic in Service not in the controller.
     private ItemService itemService;
     private ItemToItemForm itemToItemForm;
 
-    //@Autowired
-    //public ItemController(ItemService itemService){
-//        this.itemService = itemService;
-//    }
+
 
     @Autowired
     public void setItemService(ItemService itemService) {
@@ -36,9 +34,19 @@ public class ItemController {
         this.itemToItemForm = itemToItemForm;
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value="/index", method = RequestMethod.GET)
+    public String index() {
+        return "index";
+    }
+
+    @RequestMapping(value="/user/index", method = RequestMethod.GET)
+    public String userIndex() {
+        return "user/index";
+    }
+
+    @RequestMapping(value = "/items", method = RequestMethod.GET)
     public String redirToList() {
-        //return "index.html";
+        //return "index2.html";
         return "redirect:/items/list";
 
     }
@@ -48,20 +56,20 @@ public class ItemController {
         return "Hello from RESTController";
     }
 
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/items/list", method = RequestMethod.GET)
     public String listItems(Model model){
         model.addAttribute("pageTitle","Warehouse Items");
         model.addAttribute("items",itemService.list());
         return "itemslist.html";
     }
 
-    @RequestMapping(value = "/show/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/items/show/{id}", method = RequestMethod.GET)
     public String showItemDetails(@PathVariable(value="id") long id, Model model){
         model.addAttribute("item",itemService.read(id));
         return "itemshow.html";
     }
 
-    @RequestMapping( value = "/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping( value = "/items/edit/{id}", method = RequestMethod.GET)
     public String editItem(@PathVariable(value="id") long id, Model model){
         Item item = itemService.read(id);
         ItemForm itemForm = itemToItemForm.convert(item);
@@ -69,7 +77,7 @@ public class ItemController {
         return "itemform.html";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/items/new", method = RequestMethod.GET)
     public String newItem(Model model){
         //Item item = itemService.read(id);
         Item item = new Item("default", "default");
@@ -80,7 +88,7 @@ public class ItemController {
 
     // here we receive updated item from form.
     // need to find in db and update.
-    @RequestMapping(value = "/saveorupdate", method = RequestMethod.POST)
+    @RequestMapping(value = "/items/saveorupdate", method = RequestMethod.POST)
     public String saveOrUpdateItem(@Valid ItemForm itemForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             return "itemform";
@@ -89,12 +97,28 @@ public class ItemController {
         return "redirect:/items/show/" + savedItem.getId();
     }
 
+    // PROBLEM: method = RequestMethod.DELETE
+    // @RequestMapping(value ="/items/delete/{id}", method = RequestMethod.DELETE)
+    // <td><a th:href="${'/items/delete/' + item.id}">Delete</a> </td>
+    // dostaje GET method  not supported jak tu mam DELETE
 
-    @RequestMapping(value ="/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value ="/items/delete/{id}")
     public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttr){
         itemService.delete(id);
         redirectAttr.addFlashAttribute("message", "Item was deleted.");
         return "redirect:/items/list";
     }
+
+    @RequestMapping(value="/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
+
+    @RequestMapping(value="/login-error", method = RequestMethod.GET)
+    public String loginError(Model model) {
+        model.addAttribute("loginError", true);
+        return "login";
+    }
+
 
 }

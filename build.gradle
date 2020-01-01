@@ -49,6 +49,12 @@ dependencies {
 	implementation 'org.postgresql:postgresql'
 	implementation 'mysql:mysql-connector-java'
 	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile group: 'org.springframework.security', name: 'spring-security-web'
+	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
+
+  
+    
 	
 	compile('org.projectlombok:lombok')
 	annotationProcessor('org.projectlombok:lombok:1.18.10')	

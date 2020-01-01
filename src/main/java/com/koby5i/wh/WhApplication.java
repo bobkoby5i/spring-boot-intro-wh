@@ -36,7 +36,7 @@ public class WhApplication {
 	// ItemsConstructor
 	@PostConstruct
 	void seeItems() {
-		logger.info("seeItems methid called ...");
+		logger.info("seeItems method called ...");
 		for(Item item : itemRepository.findAll()){
 			logger.info(item.toString());
 		}
