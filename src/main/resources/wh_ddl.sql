@@ -28,7 +28,49 @@ select * from items;
   5 | Kubek   | Kubek starbucks |  10 |   21.00 | 2019-12-29 11:02:19.992513+01 | 2019-12-29 11:02:51.990521+01
 (5 rows)
 
+-- Schema for security implementation
+create table users(
+	username varchar(50) not null primary key,
+	password varchar(150) not null,
+	enabled boolean
+);
+
+create table authorities(
+	username varchar(50) NOT null,
+	authority varchar(50) NOT null,
+	FOREIGN KEY (username) REFERENCES users(username)
+);
+
+create unique index idx_auth_username on authorities (username, authority);
+
+
+--password='password'
+--encodedPassword='$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC'
+insert into users(username, password, enabled) values('user', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true);
+insert into users(username, password, enabled) values('admin', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true);
+
+insert into authorities(username, authority) values('user','ROLE_USER');
+insert into authorities(username, authority) values('admin','ROLE_ADMIN');
+
+wh_db=# select * from users;
+ username |                           password                           | enabled
+----------+--------------------------------------------------------------+---------
+ user     | $2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC | t
+ admin    | $2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC | t
+(2 rows)
+
+
+wh_db=# select * from authorities;
+ username | authority
+----------+------------
+ user     | ROLE_USER
+ admin    | ROLE_ADMIN
+(2 rows)
+
+
+--
 -- MySQL old version for lesson 1
+--
 DROP TABLE items;
 CREATE TABLE items
 (
@@ -36,5 +78,7 @@ CREATE TABLE items
     name                   varchar(15),
     description            varchar(30),
     qty                    int,
-        price                 decimal(10,2)
+    price                  decimal(10,2)
 );
+
+

@@ -14,8 +14,11 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+import javax.sql.DataSource;
 
 
 //@Configuration
@@ -29,19 +32,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/user/**").hasRole("USER")
-                    .antMatchers("/items/show/**").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/items/edit/**").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/items/saveorupdate/**").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/items/delete/**").hasRole("ADMIN")
-                    .antMatchers("/items/new/**").hasRole("ADMIN")
-                    .antMatchers("/items/list/**").permitAll()
+                    .antMatchers("/admin/**").hasRole("ADMIN")
+                    .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/api/**").permitAll()
                     .antMatchers("/css/**", "/index").permitAll()
-//                    .anyRequest().authenticated()
+                    .antMatchers("/").permitAll()
+                    //.anyRequest().authenticated()
                 .and()
                     .formLogin()
+                        .loginPage("/login")
+                        .permitAll()
                 .and()
-                    .logout();
+                    .logout()
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll();
                 //.loginPage("/login").failureUrl("/login-error");
     }
 
@@ -64,9 +68,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //    }
 
     //use=user
-    // password=secret123
+    //password=secret123
+    //encodedPassword='$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2'
+    //password='password
+    //encodedPassword='$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC'
+
     private static final String USER_ENCODED_PASSWORD = "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
 
+    @Autowired
+    DataSource dataSource;
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -76,12 +86,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String encodedPassword = passwordEncoder.encode(password);
         System.out.println("password='" + password + "' encodedPassword='" + encodedPassword + "'.");
 
-
-        auth.inMemoryAuthentication()
-                .passwordEncoder(getPasswordEncoder())
-                .withUser("user").password(encodedPassword).roles("USER")
-                .and()
-                .withUser("admin").password(encodedPassword).roles("USER","ADMIN");
+        // users stored in DB
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .usersByUsernameQuery("select username, password, enabled "
+                        + "from users "
+                        + "where username = ?")
+                .authoritiesByUsernameQuery("select username, authority "
+                        + "from authorities "
+                        + "where username = ?");
     }
 
 
@@ -89,6 +101,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+//    public PasswordEncoder getPasswordEncoder() {
+//        return NoOpPasswordEncoder.getInstance();
+//    }
 
 
 //    // @formatter:off

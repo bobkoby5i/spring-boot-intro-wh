@@ -39,37 +39,58 @@ public class ItemController {
         return "index";
     }
 
+    @RequestMapping(value="/index2", method = RequestMethod.GET)
+    public String index2() {
+        return "index2";
+    }
+
+    @RequestMapping(value = "/items", method = RequestMethod.GET)
+    public String listItemsPub(Model model){
+        model.addAttribute("pageTitle","Warehouse Items");
+        model.addAttribute("items",itemService.list());
+        return "itemslist_pub.html";
+    }
+
     @RequestMapping(value="/user/index", method = RequestMethod.GET)
     public String userIndex() {
         return "user/index";
     }
 
-    @RequestMapping(value = "/items", method = RequestMethod.GET)
-    public String redirToList() {
-        //return "index2.html";
-        return "redirect:/items/list";
-
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public String redirToUserList() {
+        return "redirect:/user/items/list";
     }
 
-    @RequestMapping(value = "/hello", method = RequestMethod.GET) // dziala jak jest @Restcontroller ale nie zadziala jak jest @Controler & thymeleaf
-    public String home(){
-        return "Hello from RESTController";
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public String redirToAdminList() {
+        return "redirect:/admin/items/list";
     }
 
-    @RequestMapping(value = "/items/list", method = RequestMethod.GET)
-    public String listItems(Model model){
+
+
+
+
+    @RequestMapping(value = "/user/items/list", method = RequestMethod.GET)
+    public String listItemsUser(Model model){
         model.addAttribute("pageTitle","Warehouse Items");
         model.addAttribute("items",itemService.list());
-        return "itemslist.html";
+        return "itemslist_user.html";
     }
 
-    @RequestMapping(value = "/items/show/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/items/list", method = RequestMethod.GET)
+    public String listItemsAdmin(Model model){
+        model.addAttribute("pageTitle","Warehouse Items");
+        model.addAttribute("items",itemService.list());
+        return "itemslist_admin.html";
+    }
+
+    @RequestMapping(value = "/admin/items/show/{id}", method = RequestMethod.GET)
     public String showItemDetails(@PathVariable(value="id") long id, Model model){
         model.addAttribute("item",itemService.read(id));
         return "itemshow.html";
     }
 
-    @RequestMapping( value = "/items/edit/{id}", method = RequestMethod.GET)
+    @RequestMapping( value = "/admin/items/edit/{id}", method = RequestMethod.GET)
     public String editItem(@PathVariable(value="id") long id, Model model){
         Item item = itemService.read(id);
         ItemForm itemForm = itemToItemForm.convert(item);
@@ -77,7 +98,7 @@ public class ItemController {
         return "itemform.html";
     }
 
-    @RequestMapping(value = "/items/new", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/items/new", method = RequestMethod.GET)
     public String newItem(Model model){
         //Item item = itemService.read(id);
         Item item = new Item("default", "default");
@@ -88,13 +109,15 @@ public class ItemController {
 
     // here we receive updated item from form.
     // need to find in db and update.
-    @RequestMapping(value = "/items/saveorupdate", method = RequestMethod.POST)
-    public String saveOrUpdateItem(@Valid ItemForm itemForm, BindingResult bindingResult){
+    @RequestMapping(value = "/admin/items/saveorupdate", method = RequestMethod.POST)
+    public String saveOrUpdateItem(@Valid ItemForm itemForm, BindingResult bindingResult,RedirectAttributes redirectAttr){
         if(bindingResult.hasErrors()){
             return "itemform";
         }
         Item savedItem = itemService.saveOrUpdateItemForm(itemForm);
-        return "redirect:/items/show/" + savedItem.getId();
+        //return "redirect:/admin/items/show/" + savedItem.getId();
+        redirectAttr.addFlashAttribute("message", "Item (ID:"+  savedItem.getId() + " Name:"+  savedItem.getName() +" ) was updated.");
+        return "redirect:/admin/items/list";
     }
 
     // PROBLEM: method = RequestMethod.DELETE
@@ -102,15 +125,16 @@ public class ItemController {
     // <td><a th:href="${'/items/delete/' + item.id}">Delete</a> </td>
     // dostaje GET method  not supported jak tu mam DELETE
 
-    @RequestMapping(value ="/items/delete/{id}")
+    @RequestMapping(value ="/admin/items/delete/{id}")
     public String deleteItem(@PathVariable Long id, RedirectAttributes redirectAttr){
         itemService.delete(id);
-        redirectAttr.addFlashAttribute("message", "Item was deleted.");
-        return "redirect:/items/list";
+        redirectAttr.addFlashAttribute("message", "Item (ID:"+  id + " ) was deleted.");
+        return "redirect:/admin/items/list";
     }
 
     @RequestMapping(value="/login", method = RequestMethod.GET)
-    public String login() {
+    public String login(Model model) {
+        model.addAttribute("pageTitle","Warehouse NN Login");
         return "login";
     }
 

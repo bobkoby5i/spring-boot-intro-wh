@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorator="layouts/main">
+<head>
+    <title>Warehouse - Pub Page</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="logout" sec:authorize="isAuthenticated()">
+        Logged in user: <span sec:authentication="name"></span> |
+        Roles: <span sec:authentication="principal.authorities"></span>
+    </div>
+    <div class="logout" sec:authorize="!isAuthenticated()">
+        Logged in user : <span sec:authentication="name"></span> |
+        Roles: []
+    </div>
+
+    <div th:if="${not #lists.isEmpty(items)}">
+        <h2>Public Product List </h2>
+        <div th:if="${message}" class="alert alert-success" role="alert">
+            <p th:text="${message}">success message</p>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped"  style="width:400px">
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                </tr>
+                <tr th:each="item : ${items}">
+                    <td th:text="${item.id}">hext string</td>
+                    <td th:text="${item.name}">name</td>
+                    <td th:text="${item.description}">description</td>
+                    <td align="right" th:text="${#numbers.formatDecimal(item.price,0,2,'COMMA')}">10.99</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+</body>
+</html>

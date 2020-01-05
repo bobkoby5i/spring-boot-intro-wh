@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorator="layouts/main">
+<head>
+    <title>Security Demo - Home Page</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div sec:authorize="isAuthenticated()">
+        Hello <span sec:authentication="name">username</span>, nice to see you again.
+    </div>
+    <div sec:authorize="!isAuthenticated()">
+        <a href="/login">Login page</a>
+        <button onclick="window.location.href = '/login';">Sign in</button>
+    </div>
+
+    <div>
+        <h2>Home Page</h2>
+        <h3>Welcome to our warehouse system</h3>
+        </hr>
+
+        <h4>Srervices</h4>
+        <div>
+            <div>Public:          <a href="/items">Items & price</a></div>
+            <div>Users: <a href="/user/items/list">Items & price + qty</a></div>
+            <div>Admin:<a href="/admin/items/list">Items & price + qty + Add & Delete</a></div>
+            <div class="row">
+                <div class="col-sm-3">
+                    API <a href="/swagger-ui.html">Swagger UI</a>
+                </div>
+            </div>
+        </div>
+
+
+        <h4>Authentication</h4>
+        <div>
+            Authenticated username: <span sec:authentication="name"></span>
+        </div>
+        <div>
+            Authenticated user roles: <span sec:authorize="isAuthenticated()"> <span sec:authentication="principal.authorities"></span></span>
+        </div>
+
+        <h4>Access granted to:</h4>
+        <div sec:authorize="hasRole('USER')"> <a href="/user/items/list">Items & qty</a></div>
+        <div sec:authorize="hasRole('ADMIN')"><a href="/admin/items/list">Add Delete item</a></div>
+    </div>
+
+
+</div>
+</body>
+</html>
+
+
+

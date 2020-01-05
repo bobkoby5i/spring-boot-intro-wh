@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en"
+      layout:decorator="layouts/main">
+<head>
+    <title>Warehouse - Users Page</title>
+</head>
+<body>
+
+<div layout:fragment="content">
+
+    <div class="logout" sec:authorize="isAuthenticated()">
+        Logged in user: <span sec:authentication="name"></span> |
+        Roles: <span sec:authentication="principal.authorities"></span>
+    </div>
+
+    <div th:if="${not #lists.isEmpty(items)}">
+        <h2>Users Product List</h2>
+        <div th:if="${message}" class="alert alert-success" role="alert">
+            <p th:text="${message}">success message</p>
+        </div>
+        <table class="table table-striped">
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th align="center">Qty</th>
+                <th align="right">Price</th>
+                <th>Created</th>
+                <th>Updated</th>
+            </tr>
+            <tr th:each="item : ${items}">
+                <td th:text="${item.id}">hext string</td>
+                <td th:text="${item.name}">name</td>
+                <td th:text="${item.description}">description</td>
+                <td align="center" th:text="${item.qty}">10</td>
+                <td align="right" th:text="${#numbers.formatDecimal(item.price,0,2,'COMMA')}">10.99</td>
+                <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd HH:mm:ss')}">2019-12-24 23:59:59</td>
+                <td th:text="${#temporals.format(item.updatedAt, 'yyyy-MM-dd HH:mm:ss')}">2019-12-24 23:59:59</td>
+            </tr>
+        </table>
+    </div>
+
+
+</div>
+
+</body>
+</html>
+
+
