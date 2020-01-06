@@ -2,8 +2,10 @@ package com.koby5i.wh.config;
 
 import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -26,6 +28,8 @@ import javax.sql.DataSource;
 //@Order(SecurityProperties.BASIC_AUTH_ORDER)
 //@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 @EnableWebSecurity
+@ComponentScan
+@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
@@ -75,11 +79,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String USER_ENCODED_PASSWORD = "$2a$10$AIUufK8g6EFhBcumRRV2L.AQNz3Bjp7oDQVFiO5JJMBFZQ6x2/R/2";
 
+
+
+//    private static final String host="localhost";
+//    private static final String port="5432";
+//    private static final String databaseName="wh_db";
+//
+//    // using separate db and appDataSource requires @ComponentScan
+//    @Bean
+//    public DataSource appDataSource2() {
+//        DriverManagerDataSource ds = new DriverManagerDataSource();
+//        //ds.setDriverClassName(org.h2.Driver.class.getName());
+//        //ds.setUrl("jdbc:h2:tcp://localhost/~/myDb");
+//        ds.setDriverClassName("org.postgresql.Driver");
+//        ds.setUrl("jdbc:postgresql://" + host + ":" + port + "/" + databaseName);
+//        ds.setUsername("wh_user");
+//        ds.setPassword("wh_password");
+//        return ds;
+//    }
+
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//
+//        String password = "password";
+//        PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encodedPassword = passwordEncoder.encode(password);
+//        System.out.println("password='" + password + "' encodedPassword='" + encodedPassword + "'.");
+//
+//        // users stored in DB
+//        auth.jdbcAuthentication().dataSource(appDataSource2())
+//                .usersByUsernameQuery("select username, password, enabled "
+//                        + "from users "
+//                        + "where username = ?")
+//                .authoritiesByUsernameQuery("select username, authority "
+//                        + "from authorities "
+//                        + "where username = ?");
+//    }
+
+
     @Autowired
     DataSource dataSource;
 
+    @Autowired
+    UserDetailsService userDetailsService;
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
 
         String password = "password";
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -87,14 +134,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         System.out.println("password='" + password + "' encodedPassword='" + encodedPassword + "'.");
 
         // users stored in DB
-        auth.jdbcAuthentication().dataSource(dataSource)
-                .usersByUsernameQuery("select username, password, enabled "
-                        + "from users "
-                        + "where username = ?")
-                .authoritiesByUsernameQuery("select username, authority "
-                        + "from authorities "
-                        + "where username = ?");
+        auth.userDetailsService(userDetailsService).passwordEncoder(getPasswordEncoder());
     }
+
+
 
 
     @Bean
