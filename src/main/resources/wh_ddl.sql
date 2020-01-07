@@ -71,16 +71,21 @@ wh_db=# select * from authorities;
 -- JPA SECURITY
 DROP TABLE USERS;
 create table users(
-    id                    SERIAL PRIMARY KEY,
-    userName              varchar(50) not null,
+    id                    SERIAL PRIMARY KEY NOT NULL,
+    user_name              varchar(50) not null,
     password              varchar(150) not null,
     enabled               boolean,
-    accountNonExpired     boolean,
-    accountNonLocked      boolean,
-    credentialsNonExpired boolean,
+    account_Non_Expired     boolean,
+    account_Non_Locked      boolean,
+    credentials_Non_Expired boolean,
     roles                 varchar(150) not null
 );
-insert into users(username, password, enabled,accountNonExpired,accountNonLocked,credentialsNonExpired,roles) values('user', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true, true, true, true,'ROLE_USER,ROLE_ADMIN'));
+
+create unique index idx_user_name on users (user_name);
+
+insert into users(user_name, password, enabled,account_Non_Expired,account_Non_Locked,credentials_Non_Expired,roles) values('bob', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true, true, true, true,'ROLE_USER,ROLE_ADMIN');
+insert into users(user_name, password, enabled,account_Non_Expired,account_Non_Locked,credentials_Non_Expired,roles) values('user', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true, true, true, true,'ROLE_USER');
+insert into users(user_name, password, enabled,account_Non_Expired,account_Non_Locked,credentials_Non_Expired,roles) values('admin', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true, true, true, true,'ROLE_ADMIN');
 
 1	bob	$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC	true	true	true	true	ROLE_USER,ROLE_ADMIN
 2	user	$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC	true	true	true	true	ROLE_USER
