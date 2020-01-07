@@ -6,10 +6,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class MyUserDetails implements UserDetails {
 
     private String userName;
+    private String password;
+    private Boolean enabled;
+    private Boolean accountNonExpired;
+    private Boolean accountNonLocked;
+    private Boolean credentialsNonExpired;
+    private List<GrantedAuthority> authorities;
+
 
 
     //use=user
@@ -18,8 +27,16 @@ public class MyUserDetails implements UserDetails {
     //password='password
     //encodedPassword='$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC'
 
-    public MyUserDetails(String userName){
-        this.userName = userName;
+    public MyUserDetails(User user){
+        this.userName = user.getUserName();
+        this.password = user.getPassword();
+        this.enabled  = user.getEnabled();
+        this.accountNonExpired = user.getAccountNonExpired();
+        this.accountNonLocked  = user.getAccountNonLocked();
+        this.credentialsNonExpired = user.getCredentialsNonExpired();
+        this.authorities = Arrays.stream(user.getRoles().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
     }
 
     public MyUserDetails(){
@@ -29,12 +46,13 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        //return Arrays.asList(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return "$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC";
+        return password;
     }
 
     @Override
@@ -44,21 +62,21 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return accountNonExpired;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return accountNonLocked;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return credentialsNonExpired;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return enabled;
     }
 }

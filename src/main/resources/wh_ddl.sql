@@ -68,6 +68,25 @@ wh_db=# select * from authorities;
 (2 rows)
 
 
+-- JPA SECURITY
+DROP TABLE USERS;
+create table users(
+    id                    SERIAL PRIMARY KEY,
+    userName              varchar(50) not null,
+    password              varchar(150) not null,
+    enabled               boolean,
+    accountNonExpired     boolean,
+    accountNonLocked      boolean,
+    credentialsNonExpired boolean,
+    roles                 varchar(150) not null
+);
+insert into users(username, password, enabled,accountNonExpired,accountNonLocked,credentialsNonExpired,roles) values('user', '$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC', true, true, true, true,'ROLE_USER,ROLE_ADMIN'));
+
+1	bob	$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC	true	true	true	true	ROLE_USER,ROLE_ADMIN
+2	user	$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC	true	true	true	true	ROLE_USER
+3	admin	$2a$10$Uquje0jeqhm0kzRFv1pqu.6DPS2dijCg2MTOP3ubOBPtXtIopoqrC	true	true	true	true	ROLE_ADMIN
+
+
 --
 -- MySQL old version for lesson 1
 --
