@@ -56,7 +56,7 @@ dependencies {
 	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
 	compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect'
 
-
+	compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter'
 
 
 
