@@ -6,6 +6,7 @@ import com.koby5i.wh.repository.ItemRepository;
 
 import com.koby5i.wh.service.DataLoader;
 import com.koby5i.wh.users.UserRepository;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class WhApplication {
 	private static final Logger logger = LoggerFactory.getLogger(WhApplication.class);
 	//private static.templates.templates final Logger logger = LoggerFactory
 
+
+
 	// ItemRepository
 	@Autowired
 	ItemRepository itemRepository;
@@ -33,7 +36,14 @@ public class WhApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(WhApplication.class, args);
-		//System.out.println("Hello World");
+		System.out.println("Hello World");
+
+		BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
+		textEncryptor.setPassword("MySecret");
+		String username = textEncryptor.encrypt("bob");
+		String password = textEncryptor.encrypt("password");
+		System.out.println("username bob      encrypted:"+username);
+		System.out.println("password passowrd encrypted:"+password);
 	}
 
 	// ItemsConstructor

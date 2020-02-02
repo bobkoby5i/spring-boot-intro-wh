@@ -1,9 +1,12 @@
 //buildscript {
 //	ext {
-//		springBootVersion = '2.1.1.RELEASE'
+//		springBootVersion = '2.2.1.RELEASE'
 //	}
 //	repositories {
 //		mavenCentral()
+//		maven {
+//			url "https://repo.spring.io/libs-milestone"
+//		}
 //	}
 //	dependencies {
 //		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
@@ -28,6 +31,9 @@ sourceCompatibility = 11
 
 repositories {
 	mavenCentral()
+//	maven {
+//		url "https://repo.spring.io/libs-milestone"
+//	}
 }
 
 
@@ -56,7 +62,8 @@ dependencies {
 	compile group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5'
 	compile group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect'
 
-	compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter'
+	//compile group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter'
+	implementation 'com.github.ulisesbocchio:jasypt-spring-boot-starter:2.1.2'
 
 
 
