@@ -68,8 +68,6 @@ public class ItemController {
 
 
 
-
-
     @RequestMapping(value = "/user/items/list", method = RequestMethod.GET)
     public String listItemsUser(Model model){
         model.addAttribute("pageTitle","Warehouse Items");

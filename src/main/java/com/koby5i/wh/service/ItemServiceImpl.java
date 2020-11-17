@@ -28,6 +28,12 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public Item readItemById(long id) {
+        return itemRepository.findById(id).orElse(null);
+    }
+
+
+    @Override
     public Item read(long id) {
         return itemRepository.findById(id).orElse(null);
     }
