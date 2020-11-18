@@ -27,13 +27,15 @@ public class ItemRestController {
         return "Hello from RESTController";
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @RequestMapping(value = "/api/items", method = RequestMethod.GET) // dziala jak jest @Restcontroller ale nie zadziala jak jest @Controler & thymeleaf
     public Iterable<Item> RestApiItems(){
         return itemService.list();
     }
 
-    @CrossOrigin(origins = "http://localhost:4200")
+    //@CrossOrigin(origins = "http://localhost:4200")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @GetMapping(path = "/api/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public Item getItemById(@PathVariable long itemId) {
         return itemService.readItemById(itemId);
