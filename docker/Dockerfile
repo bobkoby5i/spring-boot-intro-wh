@@ -1,4 +1,5 @@
-FROM openjdk:11-jdk
+FROM openjdk:11-jre-slim
+#FROM openjdk:11-jdk
 VOLUME /tmp
 EXPOSE 8080
 ARG JAR_FILE=spring-boot-intro-wh.jar
