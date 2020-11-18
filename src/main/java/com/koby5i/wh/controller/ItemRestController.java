@@ -7,6 +7,7 @@ package com.koby5i.wh.controller;
         import org.springframework.http.MediaType;
         import org.springframework.security.access.prepost.PreAuthorize;
         import org.springframework.web.bind.annotation.*;
+        import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
         import java.util.Optional;
 
@@ -34,10 +35,19 @@ public class ItemRestController {
         return itemService.list();
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @RequestMapping(value ="/api/items/{id}", method = RequestMethod.DELETE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public long  deleteItemById(@PathVariable long id){
+        itemService.delete(id);
+        return id;
+    }
+
     //@CrossOrigin(origins = "http://localhost:4200")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @GetMapping(path = "/api/items/{itemId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/api/items/{itemId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public Item getItemById(@PathVariable long itemId) {
         return itemService.readItemById(itemId);
     }
+
+
 }
