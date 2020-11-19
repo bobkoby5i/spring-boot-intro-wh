@@ -3,12 +3,14 @@ package com.koby5i.wh.service;
 import com.koby5i.wh.commands.ItemForm;
 import com.koby5i.wh.converters.ItemFormToItem;
 import com.koby5i.wh.domain.Item;
+import com.koby5i.wh.domain.dto.ApiDtoProduct;
 import com.koby5i.wh.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.validation.constraints.Null;
+import java.time.LocalDateTime;
 
 @Service
 public class ItemServiceImpl implements ItemService {
@@ -24,7 +26,27 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Iterable<Item> list() {
-        return itemRepository.findAll();
+        //return itemRepository.findAll();
+        return itemRepository.findAllByOrderByIdDesc();
+    }
+
+    public Item apiDtoProductToItem(ApiDtoProduct apiDtoProduct){
+        Item item = new Item();
+        LocalDateTime now = java.time.LocalDateTime.now();
+        item.setName(apiDtoProduct.getName());
+        item.setDescription(apiDtoProduct.getDescription());
+        item.setPrice(apiDtoProduct.getPrice());
+        item.setQty(apiDtoProduct.getQty());
+        item.setCreatedAt(now);
+        item.setUpdatedAt(now);
+        return item;
+    }
+
+
+    public long postItem(ApiDtoProduct apiDtoProduct) {
+        Item item  = apiDtoProductToItem(apiDtoProduct);
+        Item itemDb = create(item);
+        return itemDb.getId();
     }
 
     @Override

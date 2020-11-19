@@ -11,6 +11,10 @@ public interface ItemRepository extends CrudRepository<Item, Long> {
     @Override
     List<Item> findAll();
 
+
+
+    List<Item> findAllByOrderByIdDesc();
+
     //@Override
     //Item findOne(long id);
 
