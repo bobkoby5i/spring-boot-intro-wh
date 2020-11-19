@@ -56,6 +56,7 @@ public class ItemRestController {
         return itemService.readItemById(itemId);
     }
 
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping(path = "/api/items/", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus( HttpStatus.CREATED )
     public long postItem(@Valid @RequestBody ApiDtoProduct apiDtoProduct) {
