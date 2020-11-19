@@ -43,10 +43,10 @@ public class ItemServiceImpl implements ItemService {
     }
 
 
-    public long postItem(ApiDtoProduct apiDtoProduct) {
+    public Item postItem(ApiDtoProduct apiDtoProduct) {
         Item item  = apiDtoProductToItem(apiDtoProduct);
         Item itemDb = create(item);
-        return itemDb.getId();
+        return itemDb;
     }
 
     @Override
