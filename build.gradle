@@ -47,6 +47,15 @@ task copyJarToDockerPackage(type: Copy, dependsOn: bootJar){
 build.dependsOn copyJarToDockerPackage // Before task build do this first
 
 
+task stage(dependsOn: ['build', 'clean'])
+build.mustRunAfter clean
+
+task copyToLib(type: Copy) {
+    into "$buildDir/libs"
+    from(configurations.compile)
+}
+
+stage.dependsOn(copyToLib)
 
 
 dependencies {
@@ -89,3 +98,10 @@ dependencies {
 //test {
 //	useJUnitPlatform()
 //}
+
+gradle.taskGraph.whenReady {
+  taskGraph ->
+    if (taskGraph.hasTask(stage)) {
+      test.enabled = false
+    }
+}
