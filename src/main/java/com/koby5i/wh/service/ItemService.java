@@ -15,5 +15,5 @@ public interface ItemService {
     Item update(long id, Item item);
     void delete(long id);
     Item saveOrUpdateItemForm(ItemForm itemForm);
-    long postItem(ApiDtoProduct apiDtoProduct);
+    Item postItem(ApiDtoProduct apiDtoProduct);
 }

@@ -57,14 +57,14 @@ public class ItemRestController {
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @PostMapping(path = "/api/items/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path = "/api/items/create", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus( HttpStatus.CREATED )
-    public long postItem(@Valid @RequestBody ApiDtoProduct apiDtoProduct) {
+    public Item postItem(@Valid @RequestBody ApiDtoProduct apiDtoProduct) {
         log.info(String.format("POST received from api product (name = %s description %s)", apiDtoProduct.getName(),apiDtoProduct.getDescription()));
         log.info(String.format("input %s",apiDtoProduct));
 
-        long id = itemService.postItem(apiDtoProduct);
-        return id;
+        Item item = itemService.postItem(apiDtoProduct);
+        return item;
     }
 
 
