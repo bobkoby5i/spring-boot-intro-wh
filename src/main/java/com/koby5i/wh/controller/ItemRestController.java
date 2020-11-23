@@ -52,6 +52,8 @@ public class ItemRestController {
 
         if(!headers.containsKey("referer"))
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        else
+            System.out.println("not found");
 
         System.out.println("Referer exists checking");
         String referer = headers.get("referer");
