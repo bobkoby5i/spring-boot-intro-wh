@@ -47,16 +47,15 @@ public class ItemRestController {
         arr.add("http://localhost:4200/products");
 
         headers.forEach((key, value) -> {
-            System.out.println("Header "+ key+" = "+ value);
+            log.debug(String.format("Header %s =  %s", key, value));
         });
 
         if(!headers.containsKey("referer"))
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
-        else
-            System.out.println("not found");
 
-        System.out.println("Referer exists checking");
         String referer = headers.get("referer");
+        log.debug(String.format("Referer exists checking %s in [%s]",referer,arr));
+
         if (!arr.contains(referer))
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
