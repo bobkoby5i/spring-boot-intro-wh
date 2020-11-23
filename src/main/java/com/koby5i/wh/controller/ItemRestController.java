@@ -59,7 +59,7 @@ public class ItemRestController {
         if (!arr.contains(referer))
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
 
-        return new ResponseEntity<>( itemService.list(), HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>( itemService.list(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
