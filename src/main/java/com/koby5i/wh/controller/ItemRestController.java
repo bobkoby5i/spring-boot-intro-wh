@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Map;
 import java.util.Optional;
 
 @Slf4j
@@ -37,9 +39,26 @@ public class ItemRestController {
 
     //@CrossOrigin(origins = "http://localhost:4200")
     @CrossOrigin(origins = "*", allowedHeaders = "*")
-    @RequestMapping(value = "/api/items", method = RequestMethod.GET) // dziala jak jest @Restcontroller ale nie zadziala jak jest @Controler & thymeleaf
-    public Iterable<Item> RestApiItems(){
-        return itemService.list();
+    @RequestMapping(value = "/api/items", method = RequestMethod.GET)
+    public ResponseEntity<?> RestApiItems(@RequestHeader Map<String, String> headers){
+        ArrayList<String> arr = new ArrayList<>();
+
+        arr.add("https://bobkoby5i.github.io/intro-angular/products");
+        arr.add("http://localhost:4200/products");
+
+        headers.forEach((key, value) -> {
+            System.out.println("Header "+ key+" = "+ value);
+        });
+
+        if(!headers.containsKey("referer"))
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        System.out.println("Referer exists checking");
+        String referer = headers.get("referer");
+        if (!arr.contains(referer))
+            return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+
+        return new ResponseEntity<>( itemService.list(), HttpStatus.UNAUTHORIZED);
     }
 
     @CrossOrigin(origins = "*", allowedHeaders = "*")
